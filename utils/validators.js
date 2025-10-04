@@ -1,4 +1,4 @@
-function validatePost(data) {
+function validateTweet(data) {
 	let errors = [];
 	if (!data.title) errors.push("titulo é obrigatorio");
 	if (!data.content) erros.push("conteudo é obrigatorio");
@@ -6,4 +6,4 @@ function validatePost(data) {
 	return errors;
 }
 
-module.exports = { validatePost }
+module.exports = { validateTweet }
