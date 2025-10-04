@@ -1,55 +1,75 @@
+const { connectDB } = require('./config/connectDB');
+const { newTweet, queryAllTweets, queryTweet, deleteTweet } = require('../models/Tweets');
+
 const readline = require("readline");
 const rl = readline.createInterface({
-	input: process.stdin,
-	output: process.stdout
-})
+    input: process.stdin,
+    output: process.stdout
+});
 
-function menu() {
-	setTimeout(() => {
-		console.clear();
-
-		console.log("1 - tweetar");
-		console.log("2 - mostrar tweets");
-		console.log("3 - busca tweet");
-		console.log("4 - edita tweet");
-		console.log("5 - deleta tweet");
-		console.log("6 - encerrar programa");
-		
-		rl.question("escolha sua opcao: ", (answer) => {
-			switch(answer) {
-				case "1": 
-					rl.question("whats happening? "), (tweet) => {
-						await newTweet(tweet);
-					}
-					break;
-				case "2":
-					console.log(await queryAllTweets()); 
-					break;
-				case "3":
-					rl.question("buscar: "), (word) => {
-						await queryTweet(word);
-					}
-					break;
-				case "4":
-					//editar tweet, nao criei a funcao ainda
-					break;
-				case "5":
-					//mostra tweets buscados e depois pede pra escolher um pra excluir
-					await queryAllTweets();
-					rl.question("qual tweet deseja deletar? "), (tweetToDelete) => {
-						await deleteTweet(tweetToDelete);	
-					}
-				case "6":
-					console.log('encerrando...');
-					rl.close();
-					process.exit(0);
-				default: {
-					console.log('opcao invalida, escolha novamente!');
-					menu();
-				}
-			}
-		})
-	}, 1000)
+function ask(question) {
+    return new Promise(resolve => rl.question(question, resolve));
 }
 
-menu();
+async function mainMenu() {
+    let running = true;
+
+    while (running) {
+        console.clear();
+        console.log("=== MENU ===");
+        console.log("1 - Tweetar");
+        console.log("2 - Mostrar tweets");
+        console.log("3 - Buscar tweet");
+        console.log("4 - Editar tweet (não implementado)");
+        console.log("5 - Deletar tweet");
+        console.log("6 - Encerrar programa");
+
+        const choice = await ask("Escolha sua opção: ");
+
+        switch(choice) {
+            case "1": {
+                const tweet = await ask("O que você quer tweetar? ");
+                await newTweet(tweet);
+                console.log("Tweet publicado!");
+                break;
+            }
+            case "2": {
+                const tweets = await queryAllTweets();
+                console.log("=== Tweets ===");
+                console.log(tweets);
+                break;
+            }
+            case "3": {
+                const word = await ask("Buscar: ");
+                const result = await queryTweet(word);
+                console.log("=== Resultados da busca ===");
+                console.log(result);
+                break;
+            }
+            case "4":
+                console.log("Função de editar tweet ainda não implementada.");
+                break;
+            case "5": {
+                const tweets = await queryAllTweets();
+                console.log("=== Tweets disponíveis ===");
+                console.log(tweets);
+                const tweetToDelete = await ask("Qual tweet deseja deletar? ");
+                await deleteTweet(tweetToDelete);
+                console.log("Tweet deletado!");
+                break;
+            }
+            case "6":
+                console.log("Encerrando...");
+                running = false;
+                break;
+            default:
+                console.log("Opção inválida!");
+        }
+
+        if (running) await ask("Pressione Enter para continuar...");
+    }
+
+    rl.close();
+}
+
+module.exports = { mainMenu };
