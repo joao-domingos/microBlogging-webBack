@@ -1,12 +1,20 @@
 const MongoClient = require('mongodb').MongoClient;
 
 let db;
+let client;
 
 async function connectDB() {
-	const client = new MongoClient('mongodb://localhost:27017');
+	client = new MongoClient('mongodb://localhost:27017');
 	await client.connect();
 	db = client.db('microblogging');
-	console.log('conectado ao mongodb');
+	console.log('conectado ao db');
+}
+
+async function desconnectDB() {
+	if (client) {
+		await client.close();
+		console.log("desconectado do db");
+	}
 }
 
 function getDB() {
