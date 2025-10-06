@@ -1,6 +1,6 @@
 const { getDB } = require('../config/connectDB');
 
-class Users {
+class User {
 	constructor(name, email) {
 		this.name = name;
 		this.email = email;
@@ -27,7 +27,7 @@ class Users {
 		return await usersDB.find({ email: userEmail }).toArray();
 	}
 
-	async function deletarUsuario(name, email) {
+	async function deletar(name, email) {
 		const db = getDB();
 		const usersDB = db.collections('users');
 
@@ -35,4 +35,4 @@ class Users {
 	}
 }
 
-module.exports = { cadastrar,  buscarNome, buscarEmail, deletarUsuario };
+module.exports = { cadastrar,  buscarNome, buscarEmail, deletar };
