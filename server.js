@@ -1,5 +1,5 @@
 const http = require('http');
-const router = require('./routes/router');
+const { connectDB } = require('../config/connectDB');
 
 const PORT = 8080;
 
