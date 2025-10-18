@@ -1,63 +1,70 @@
 const { getDB } = require('../config/connectDB');
+const logger = require('../utils/logger');
 
-function getCollection() {
-	return getDB().collection('tweets');
-}
+const db = getDB();
+const tweetsDB = db.collection('tweets');
 
-async function getTimeDate() {
+async function getHoraData() {
 	const currentDate = new Date();
 	const currentTime = currentDate.getTime();
 	return { tweetDate: currentDate, tweetTime: currentTime };
 }
 
-async function newTweet(tweet) {
-	const dbTweets = getCollection();
+async function novoTweet(tweet) {
+    if (!tweet) {
+        throw new Error("não é possível inserir tweet sem conteúdo");
+    }
 	const timeDate =  await getTimeDate();
 	const tweetInfo = { userTweet: tweet, ...timeDate };
 	try {
-		await dbTweets.insertOne(tweetInfo);
-		console.log("tweet inserted");
+		await tweetsDB.insertOne(tweetInfo);
+		console.log('tweet inserido!');
 	}
 	catch (error) {
-		console.log('error inserting tweets')
+		console.log('erro ao inserir tweet', error);
+		logger(error);
 	}
 }
 
-async function queryTweet(word) {
-	const dbTweets = getCollection();
+async function buscarTweetPalavra(word) {
+    if (!word) {
+        throw new Error("não foi possível buscar, palavra inválida ou não existente")
+    }
 	try {
-		const found = await dbTweets.find({ word }).limit(10).toArray();
-		console.log('10 tweets by word found');
+		const found = await tweetsDB.find({ word }).limit(10).toArray();
+		console.log('10 tweets encontrados com essa palavra');
 		return found;
 	}
 	catch (error) {
-		console.log('error querying 10 tweets', error);
+		console.log('erro ao consultar tweets', error);
+		logger(error);
 	}
 }
 
-async function queryAllTweets() {
-	const dbTweets = getCollection();
+async function buscarTodosTweets() {
 	try {
-		const found = await dbTweets.find({}).toArray();
-		console.log('all tweets found');
+		const found = await tweetsDB.find({}).toArray();
+		console.log('busca por todos os tweets completa');
 		return found;
 	};
 	catch (error) {
-		console.log('error querying all tweets', error);
+		console.log('erro ao buscar todos os tweets', error);
+		logger(error);
 	}
 }
 
 async function deleteTweet(tweetToDelete) {
-	if (tweetToDelete) {
-		const dbTweets = getCollection();
-		try {
-			await dbTweets.deleteOne({ _id: tweetToDelete._id });
-			console.log('tweet deleted: ', tweetToDelete);
-		}
-		catch (error) {
-			console.log('error deleting tweet', error);
-		}
+    if (!tweetToDelete) {
+        throw new Error("tweet a ser deletado não existe ou inválido");
+    }
+	try {
+		await dbTweets.deleteOne({ _id: tweetToDelete._id });
+		console.log(`tweet de id: ${tweetToDelete._id} deletado com sucesso`);
+	}
+	catch (error) {
+		console.log('error deleting tweet', error);
+		logger(error);
 	}
 }
 
-module.exports = { newTweet, queryTweet, queryAllTweets, deleteTweet };
+module.exports = { novoTweet, buscarTweet, buscarTodosTweets, deletarTweet };

@@ -4,7 +4,7 @@ const { connectDB } = require('../config/connectDB');
 const PORT = 8080;
 
 const server = http.createServer((req, res) => {
-	router(req, res);
+	res.end("entrega1-webBack")
 });
 
 server.listen(PORT, () => {
