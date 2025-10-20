@@ -1,5 +1,5 @@
-const { getDB } = require('../config/connectDB');
-const logger = require('../utils/logger');
+const { database } = require('./database');
+const logger = require('./logger');
 
 const db = getDB();
 const tweetsDB = db.collection('tweets');
@@ -65,6 +65,17 @@ async function deleteTweet(tweetToDelete) {
 		console.log('error deleting tweet', error);
 		logger(error);
 	}
+}
+
+async function atualizarTweet(tweetId, tweetContent) {
+    if (!tweetId || !tweetContent) {
+        throw new Error("tweetId ou tweetContent não existente ou inválido");
+    }
+    
+    try {
+        await tweetsDB.updateOne({ tweetId }), { $set: { tweetContent, updateAt } }
+    }
+
 }
 
 module.exports = { novoTweet, buscarTweet, buscarTodosTweets, deletarTweet };

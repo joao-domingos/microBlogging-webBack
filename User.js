@@ -1,5 +1,5 @@
-const { getDB } = require('../config/connectDB');
-const logger = require('../utils/logger');
+const { database } = require('.database');
+const logger = require('./logger');
 
 const db = getDB();
 const usersDB = db.collection('users');
@@ -77,7 +77,7 @@ async function buscarEmailUsuario(email) {
 
 async function deletarUsuario(name, email) {
 	if (!name || !email) {
-		throw new Error("os dois campos sao obrigatorios");
+		throw new Error("os dois campos sao obrigatórios");
 	}
 	if (!email.includes("@")) {
 		throw new Error("email invalido")
@@ -102,5 +102,20 @@ async function deletarUsuario(name, email) {
 	}
 }
 
-module.exports = { cadastrarUsuario, buscarNomeUsuario, buscarEmailUsuario, deletarUsuario };
+async function atualizarUsuario(nome, email) {
+    	if (!name || !email) {
+		throw new Error("os dois campos sao obrigatórios");
+	}
+	
+	try {
+	    await usersDB.updateOne({ nome, email }), { $set: { updateAt: new Date() } });
+	    console.log("usuario atualizado");
+	}
+	catch (error) {
+	    console.log("erro ao atualizar curtida");
+	    logger(error);
+	}
+}  
+
+module.exports = { cadastrarUsuario, buscarNomeUsuario, buscarEmailUsuario, deletarUsuario, atualizarUsuario };
 

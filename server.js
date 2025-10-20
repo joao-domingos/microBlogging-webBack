@@ -1,5 +1,5 @@
 const http = require('http');
-const { connectDB } = require('../config/connectDB');
+const { database } = require('./database');
 
 const PORT = 8080;
 

@@ -1,15 +1,12 @@
-const { connectDB } = require('../config/connectDB');
-const logger = require('../utils/logger');
+const { database } = require('./database');
+const logger = require('./logger');
 
 const db = await connectDB();
 const likesDB = db.collection('likes');
 
 async function curtirTweet(tweetId, userId) {
-    if (!tweetId) {
-        throw new Error("tweetId não existente ou inválido");
-    }
-    if (!userId) {
-        throw new Error("userId não existente ou inválido");
+    if (!tweetId || !userId) {
+        throw new Error("tweetId ou userId não existente ou inválido");
     }
     
     const isLiked = await likesDB.findOne({ tweetId, userId });
@@ -20,6 +17,7 @@ async function curtirTweet(tweetId, userId) {
     try {
         await db.collection('likes').insertOne({ tweetId, userId, createdAt: new Date()});
         console.log('tweet curtido inserido com sucesso!');
+    }
     catch (error) {
         console.log('erro ao inserir o tweet curtido no db');
         logger(error);
@@ -27,11 +25,8 @@ async function curtirTweet(tweetId, userId) {
 }
 
 async function removerCurtida(tweetId, userId) {
-    if (!tweetId) {
-        throw new Error("tweetId não existente ou inválido");
-    }
-    if (!userId) {
-        throw new Error("userId não existente ou inválido");
+    if (!tweetId || !userId) {
+        throw new Error("tweetId ou userId não existente ou inválido");
     }
     
     const isLiked = await likesDB.findOne({ tweetId, userId });
@@ -41,7 +36,7 @@ async function removerCurtida(tweetId, userId) {
     }
     
     try {
-        likesDB.deleteOne({ tweetId: tweetId, userId: userId });
+        await likesDB.deleteOne({ tweetId: tweetId, userId: userId });
         console.log("curtida deletada com sucesso");
     }
     catch (error) {
@@ -80,5 +75,21 @@ async function buscarCurtidasTweet(tweetId) {
     }
 }
 
-module.exports = { curtirTweet, removerCurtida, buscarCurtidasUsuario, buscarCurtidasTweet };
+async function atualizarCurtida(tweetId, userId) {
+    if (!tweetId || !userId) {
+        throw new Error("tweetId ou userId não existente ou inválido");
+    }
+
+    try {
+        await likesDB.updateOne({ tweetId, userId }, { $set: { updatedAt: new Date() } });
+        console.log("curtida atualizada");
+    } catch (error) {
+        console.log("erro ao atualizar curtida");
+        logger(error);
+    }
+}
+
+
+
+module.exports = { curtirTweet, removerCurtida, buscarCurtidasUsuario, buscarCurtidasTweet, atualizarCurtida };
 
