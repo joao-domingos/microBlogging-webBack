@@ -1,22 +1,18 @@
-## **Project:** Micro Blogging - web back end
+## *Projeto 1:** Micro Blogging
 
-Projeto para aula de programação web back-end com foco em banco de dados e servidor, logo sem a parte web. Esse projeto cria um sistema que permite ao usuario criar posts e depois busca-los, usando node.js e mondodb, sem o auxilio de express.
+Projeto 1 da disciplina Programação Web Back-End, com foco em banco de dados e servidor. A atividade proposta consiste em uma criação de CRUD para 3 classes de armazenamento, juntamente com arquivo de log e de banco de dados e pode ser conferida detalhadamente no link abaixo:
+
+[📄 Proposta do projeto 1](./proposta.pdf)
+
 
 ## Como foi feito:
 
-**Tech used:** JavaScript, NODE.js, MongoDB, MVC, Git
-
-## Como rodar no linux: 
-
-**1** - make sure u have nodejs and mongodb installed
-**2** - inicialize your mongodb service
-**3** - start app.js file using $ node app.js
+**Tech used:** JavaScript, Node.js, MongoDB, Git
 
 ## O que eu aprendi:
 
-Nesse projeto aprendi conceitos introdutórios a programação web back-end e apesar de não ser um projeto complexo, me ajudou a entender e visualizar melhor como funcionam os softwares na vida real
+Nesse projeto aprendi conceitos introdutórios a programação web back-end que apesar de simples, me introduziram ao conceito de criação de APIs, além de ter me forçado, inconscientemente, à pensar previamente no desenvolvimento levando em consideração boas práticas.
 
-Implementei mvc conscientemente e trabalhei com api pela primeira vez
 
 
 
