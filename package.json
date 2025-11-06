@@ -1,0 +1,25 @@
+{
+  "name": "microblogging-webback",
+  "version": "1.0.0",
+  "description": "Projeto para aula de programação web back-end com foco em banco de dados e servidor, logo sem a parte web. Esse projeto cria um sistema que permite ao usuario criar posts e depois busca-los, usando node.js e mondodb, sem o auxilio de express.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joao-domingos/microBlogging-webBack.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joao-domingos/microBlogging-webBack/issues"
+  },
+  "homepage": "https://github.com/joao-domingos/microBlogging-webBack#readme",
+  "dependencies": {
+    "express": "^5.1.0",
+    "mongodb": "^7.0.0",
+    "node": "^25.1.0",
+    "nodemon": "^3.1.10"
+  }
+}
