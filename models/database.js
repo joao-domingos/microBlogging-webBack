@@ -1,25 +1,15 @@
-const MongoClient = require('mongodb').MongoClient;
+const { MongoClient } = require('mongodb');
 
-let db;
+const uri = 'mongodb://localhost:27017';
+
 let client;
-
 async function connectDB() {
-	client = new MongoClient('mongodb://localhost:27017');
-	await client.connect();
-	db = client.db('microblogging');
-	console.log('conectado ao db');
-}
-
-async function desconnectDB() {
-	if (client) {
-		await client.close();
-		console.log("desconectado do db");
+	if (!client) {
+		const client = new MongoClient(uri);
+		await client.connect();
+		console.log("conectado ao db");
 	}
+	return client.db("microblogging");
 }
 
-function getDB() {
-	if (!db) throw new Error('banco de dados nao inicializado');
-	return db;
-}
-
-module.exports = { connectDB, desconnectDB, getDB };
+module.exports = { connectDB };
