@@ -5,7 +5,7 @@ const uri = 'mongodb://localhost:27017';
 let client;
 async function connectDB() {
 	if (!client) {
-		const client = new MongoClient(uri);
+		client = new MongoClient(uri);
 		await client.connect();
 		console.log("conectado ao db");
 	}

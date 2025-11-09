@@ -1,8 +1,7 @@
-const { database } = require('.database');
+const database = require('./database');
 const logger = require('./logger');
 
-const db = getDB();
-const usersDB = db.collection('users');
+const usersDB = database.users;
 
 async function cadastrarUsuario(name, email) {
 	if (!name && !email) {
@@ -38,7 +37,7 @@ async function buscarNomeUsuario(nome) {
 		}
 
 		console.log(`lista de usuarios com nome ${nome}`);
-		for users in usersByName {
+		for (const users of usersByName) {
 			console.log(`${users} - ${usersByName}\n`);
 		}
 	}
@@ -52,7 +51,7 @@ async function buscarEmailUsuario(email) {
 	if (!email) {
 		throw new Error("campo email obrigatorio");
 	}
-	if (!email.includes("@") {
+	if (!email.includes("@")) {
 		throw new Error("email invalido");
 	}
 	try {
@@ -108,7 +107,7 @@ async function atualizarUsuario(nome, email) {
 	}
 	
 	try {
-	    await usersDB.updateOne({ nome, email }), { $set: { updateAt: new Date() } });
+	    await usersDB.updateOne({ nome, email }, { $set: { updateAt: new Date() } });
 	    console.log("usuario atualizado");
 	}
 	catch (error) {

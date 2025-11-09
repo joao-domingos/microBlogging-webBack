@@ -1,0 +1,21 @@
+const express = require('express');
+const router = express.Router();
+
+const db = require('../models/database');
+const users = require('../models/User');
+
+usersDB = db.connectDB;
+
+router.get('/', (req, res) => {
+	usersList = usersDB.find();
+	res.json(users);
+})
+
+router.post('/', (req, res) => {
+	const user = req.body;
+	usersDB.insertOne(user);
+	res.json(user);
+})
+
+
+module.exports = router;
