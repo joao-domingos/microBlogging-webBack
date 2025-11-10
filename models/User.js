@@ -40,6 +40,7 @@ async function buscarNomeUsuario(nome) {
 		for (const users of usersByName) {
 			console.log(`${users} - ${usersByName}\n`);
 		}
+		return usersByName;
 	}
 	catch (error) {
 		console.log("erro ao buscar usuario pelo nome");
