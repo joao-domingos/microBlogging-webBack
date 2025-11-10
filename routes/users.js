@@ -17,5 +17,15 @@ router.post('/', (req, res) => {
 	res.json(user);
 })
 
+router.get('/byName', (req, res) => {
+	const nameToFind = req.body;
+	const usersByName = [];
+	if (!nameToFind) {
+		res.json("necessario incluir um nome");
+	}
+	usersByName = buscarNomeUsuario(nameToFind);
+	res.json(usersByName);
+})
+
 
 module.exports = router;
