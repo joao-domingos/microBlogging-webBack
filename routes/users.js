@@ -34,10 +34,15 @@ router.get('/byName/:name', async (req, res) => {
 	}
 })
 
-router.get('/byEmail', async (req, res) => {
-	const { email } = req.query;
-	const users = await User.buscarEmailUsuario(email);
-	res.json(users);
+router.get('/byEmail/:email', async (req, res) => {
+	try {
+		const email = req.params.email;
+		const users = await User.buscarEmailUsuario(email);
+		res.json(users);
+	}
+	catch (error) {
+		res.json({ error: error.message });
+	}
 })
 
 //meesmo problema da funcao update

@@ -54,18 +54,9 @@ async function buscarEmailUsuario(email) {
 	}
 	try {
 		const db = await connectDB();
-		const userByEmail = await db.users.find({ email: userEmail }).toArray();
+		const userByEmail = await db.collection('users').find({ email: email }).toArray();
 		
-		if (!userByEmail) {
-			console.log("email nao cadastrado no sistema");
-			return;
-		}
-		if (userByName.length > 1) {
-			throw new Error("email ja cadastro no sistema")
-		}
-
-		console.log(`buscando:  ${email}\n`);
-		console.log(`name: ${userByEmail.name} email: ${userByEmail.email}`);
+		return userByEmail;
 	}
 	catch (error) {
 		console.log("erro ao buscar usuario pelo email");
