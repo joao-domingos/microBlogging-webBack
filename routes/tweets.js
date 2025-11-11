@@ -1,12 +1,16 @@
 const express = require('express');
-const tweets = require('../models/Tweets');
-const db = require('../models/database');
+const Tweets = require('../models/Tweets');
 
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-	const tweetsQuery = await tweets.buscarTodosTweets();
-	res.json(tweetsQuery);
+	try {
+		const tweetsQuery = await Tweets.buscarTodosTweets();
+		res.json(tweetsQuery);
+	}
+	catch (error) {
+		res.json({ error: error.message });
+	}
 })
 
 router.post('/newTweet', async (req, res) => {

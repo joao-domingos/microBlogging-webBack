@@ -1,5 +1,6 @@
 const express = require('express');
 const User = require('../models/User');
+
 const router = express.Router();
 
 router.get('/', async (req, res) => {
@@ -13,15 +14,24 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/cadastrar', async (req, res) => {
-	const user = req.body;
-	await cadastrarUsuario(user);
-	res.json(user);
+	try {
+		const user = await User.cadastrarUsuario(req.body);
+		res.json(user);
+	}
+	catch (error) {
+		res.json({ error: error.message });
+	}
 })
 
 router.get('/byName', async (req, res) => {
-	const nameToFind = req.body;
-	const usersByName = await buscarNomeUsuario(nameToFind);
-	res.json(usersByName);
+	try {
+		const { name } = req.query;
+		const users = await User.buscarNomeUsuario(name);
+		res.json(users);
+	}
+	catch (error) {
+		res.json({ error: error.message });
+	}
 })
 
 router.get('/byEmail', async (req, res) => {

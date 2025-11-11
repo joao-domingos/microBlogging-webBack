@@ -2,8 +2,8 @@ const { connectDB } = require('./database');
 const logger = require('./logger');
 
 async function queryAllUsers() {
-	const dbAux = await connectDB();
-	const queryUsers = await dbAux.collection('users').find({}).toArray();
+	const db = await connectDB();
+	const queryUsers = await db.collection('users').find({}).toArray();
 	return queryUsers;
 }
 	
@@ -35,7 +35,7 @@ async function buscarNomeUsuario(nome) {
 	}
 	try {
 		const db = connectDB();
-		const usersByName = await db.users.find({ name: nome }).toArray();
+		const usersByName = await db.collection('users').find({ name: nome }).toArray();
 		
 		if (usersByName.length === 0) {
 			console.log("nenhum usuario cadastrado");

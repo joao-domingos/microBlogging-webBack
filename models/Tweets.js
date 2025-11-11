@@ -1,8 +1,5 @@
-const db = require('./database');
+const { connectDB } = require('./database');
 const logger = require('./logger');
-
-let tweetsDB = db.connectDB();
-tweetsDB = tweetsDB.tweets;
 
 async function getHoraData() {
 	const currentDate = new Date();
@@ -17,7 +14,8 @@ async function novoTweet(tweet) {
 	const timeDate =  await getTimeDate();
 	const tweetInfo = { userTweet: tweet, ...timeDate };
 	try {
-		await tweetsDB.insertOne(tweetInfo);
+		const db = connectDB();
+		await db.collection('tweets').insertOne(tweetInfo);
 		console.log('tweet inserido!');
 	}
 	catch (error) {
@@ -31,7 +29,8 @@ async function buscarTweetPalavra(word) {
         throw new Error("não foi possível buscar, palavra inválida ou não existente")
     }
 	try {
-		const found = await tweetsDB.find({ word }).limit(10).toArray();
+		const db = await connectDB();
+		const found = await db.collection('tweets').find({ word }).limit(10).toArray();
 		console.log('10 tweets encontrados com essa palavra');
 		return found;
 	}
@@ -43,7 +42,8 @@ async function buscarTweetPalavra(word) {
 
 async function buscarTodosTweets() {
 	try {
-		const found = await tweetsDB.find({}).toArray();
+		const db = await connectDB();
+		const found = await db.collection('tweets').find({}).toArray();
 		console.log('busca por todos os tweets completa');
 		return found;
 	}
@@ -58,7 +58,8 @@ async function deleteTweet(tweetToDelete) {
         throw new Error("tweet a ser deletado não existe ou inválido");
     }
 	try {
-		await dbTweets.deleteOne({ _id: tweetToDelete._id });
+		const db = connectDB();
+		await db.collection('tweets').deleteOne({ _id: tweetToDelete._id });
 		console.log(`tweet de id: ${tweetToDelete._id} deletado com sucesso`);
 	}
 	catch (error) {
