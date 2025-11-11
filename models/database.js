@@ -3,17 +3,17 @@ const { MongoClient } = require('mongodb');
 const uri = 'mongodb://localhost:27017';
 
 let client;
-let db;
-const database = "microblogging";
+let database;
+const projectDB = "microblogging";
 
 async function connectDB() {
 	if (!client) {
 		client = new MongoClient(uri);
 		await client.connect();
-		db = client.db(database);
+		database = client.db(projectDB);
 		console.log("conectado ao db");
 	}
-	return db;
+	return database;
 }
 
 module.exports = { connectDB };

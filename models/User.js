@@ -2,8 +2,8 @@ const { connectDB } = require('./database');
 const logger = require('./logger');
 
 async function queryAllUsers() {
-	const db = await connectDB();
-	const queryUsers = await db.users.find({}).toArray();
+	const dbAux = await connectDB();
+	const queryUsers = await dbAux.collection('users').find({}).toArray();
 	return queryUsers;
 }
 	
