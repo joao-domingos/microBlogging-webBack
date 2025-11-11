@@ -23,21 +23,21 @@ router.post('/cadastrar', async (req, res) => {
 	}
 })
 
-router.get('/byName', async (req, res) => {
+router.get('/byName/:name', async (req, res) => {
 	try {
-		const { name } = req.query;
+		const name = req.params.name;
 		const users = await User.buscarNomeUsuario(name);
 		res.json(users);
 	}
 	catch (error) {
-		res.json({ error: error.message });
+		res.status(500).json({ error: error.message });
 	}
 })
 
 router.get('/byEmail', async (req, res) => {
-	const emailToFind = req.body;
-	const userByEmail = await buscarEmailUsuario(emailToFind);
-	res.json(userByEmail);
+	const { email } = req.query;
+	const users = await User.buscarEmailUsuario(email);
+	res.json(users);
 })
 
 //meesmo problema da funcao update

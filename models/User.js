@@ -34,18 +34,9 @@ async function buscarNomeUsuario(nome) {
 		throw new Error("nome invalido");
 	}
 	try {
-		const db = connectDB();
+		const db = await connectDB();
 		const usersByName = await db.collection('users').find({ name: nome }).toArray();
 		
-		if (usersByName.length === 0) {
-			console.log("nenhum usuario cadastrado");
-			return;
-		}
-
-		console.log(`lista de usuarios com nome ${nome}`);
-		for (const users of usersByName) {
-			console.log(`${users} - ${usersByName}\n`);
-		}
 		return usersByName;
 	}
 	catch (error) {
