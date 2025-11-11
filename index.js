@@ -1,22 +1,29 @@
+const { connectDB } = require('./models/database');
 const express = require('express');
-const app = express();
-
-const db = require('./models/database');
 const bodyParser = require('body-parser');
 const userRoutes = require('./routes/users');
+const tweetRoutes = require('./routes/tweets');
 
+const app = express();
 const port = 3000;
 
-app.use(bodyParser.json());
-app.use('/users', userRoutes);
+async function main() {
+	try {
+		const db = await connectDB;
+		app.locals.db = db;
 
-app.get('/', (req, res) => {
-	res.json("hello world");
-})
+		app.use(bodyParser.json());
+		app.use('/users', userRoutes)
+		app.use('/tweets', tweetRoutes)
 
-db.connectDB();
+		app.listen(port, () => {
+			console.log(`app running on port ${port}`);
+		})
+	}
+	catch (error) {
+		console.log("erro ao conectar com o banco. fechando...");
+		process.exit(1);
+	}
+}
 
-app.listen(port, () => {
-	console.log(`app initialized on ${port}`);
-})
-
+main();

@@ -1,8 +1,8 @@
-const { database } = require('./database');
+const db = require('./database');
 const logger = require('./logger');
 
-const db = getDB();
-const tweetsDB = db.collection('tweets');
+let tweetsDB = db.connectDB();
+tweetsDB = tweetsDB.tweets;
 
 async function getHoraData() {
 	const currentDate = new Date();
@@ -46,7 +46,7 @@ async function buscarTodosTweets() {
 		const found = await tweetsDB.find({}).toArray();
 		console.log('busca por todos os tweets completa');
 		return found;
-	};
+	}
 	catch (error) {
 		console.log('erro ao buscar todos os tweets', error);
 		logger(error);
@@ -70,12 +70,20 @@ async function deleteTweet(tweetToDelete) {
 async function atualizarTweet(tweetId, tweetContent) {
     if (!tweetId || !tweetContent) {
         throw new Error("tweetId ou tweetContent não existente ou inválido");
-    }
+    }a
     
     try {
         await tweetsDB.updateOne({ tweetId }), { $set: { tweetContent, updateAt } }
     }
+    catch (error) {
+	console.log(error);
+    }
 
 }
 
-module.exports = { novoTweet, buscarTweet, buscarTodosTweets, deletarTweet };
+module.exports = { novoTweet,
+	buscarTweetPalavra,
+	buscarTodosTweets,
+	deleteTweet,
+	atualizarTweet
+};

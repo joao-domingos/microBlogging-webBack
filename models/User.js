@@ -1,8 +1,12 @@
-const database = require('./database');
+const { connectDB } = require('./database');
 const logger = require('./logger');
 
-const usersDB = database.users;
-
+async function queryAllUsers() {
+	const db = await connectDB();
+	const queryUsers = await db.users.find({}).toArray();
+	return queryUsers;
+}
+	
 async function cadastrarUsuario(name, email) {
 	if (!name && !email) {
 		throw new Error("todos os campos sao obrigatorios");
@@ -12,7 +16,8 @@ async function cadastrarUsuario(name, email) {
 	}
 	const user = new User(name, email);
 	try {
-		await usersDB.insertOne({ name: this.name, email: this.email });
+		const db = await connectDB();
+		await db.users.insertOne({ name: this.name, email: this.email });
 		console.log("cadastrado com sucesso!");
 	}
 	catch (error) {
@@ -29,7 +34,8 @@ async function buscarNomeUsuario(nome) {
 		throw new Error("nome invalido");
 	}
 	try {
-		const usersByName = await usersDB.find({ name: nome }).toArray();
+		const db = connectDB();
+		const usersByName = await db.users.find({ name: nome }).toArray();
 		
 		if (usersByName.length === 0) {
 			console.log("nenhum usuario cadastrado");
@@ -56,7 +62,8 @@ async function buscarEmailUsuario(email) {
 		throw new Error("email invalido");
 	}
 	try {
-		const userByEmail = await usersDB.find({ email: userEmail }).toArray();
+		const db = await connectDB();
+		const userByEmail = await db.users.find({ email: userEmail }).toArray();
 		
 		if (!userByEmail) {
 			console.log("email nao cadastrado no sistema");
@@ -93,7 +100,8 @@ async function deletarUsuario(name, email) {
 	}
 
 	try {
-		await usersDB.deleteOne({ name: name, email: email });
+		const db = connectDB();
+		await db.users.deleteOne({ name: name, email: email });
 		console.log(`usuario ${email} deletado com sucesso`);
 	}
 	catch (error) {
@@ -108,14 +116,21 @@ async function atualizarUsuario(nome, email) {
 	}
 	
 	try {
-	    await usersDB.updateOne({ nome, email }, { $set: { updateAt: new Date() } });
-	    console.log("usuario atualizado");
+		const db = connectDB();
+		
+		await db.users.updateOne({ nome, email }, { $set: { updateAt: new Date() } });
+		console.log("usuario atualizado");
 	}
 	catch (error) {
-	    console.log("erro ao atualizar curtida");
-	    logger(error);
+		console.log("erro ao atualizar curtida");
+		logger(error);
 	}
 }  
 
-module.exports = { cadastrarUsuario, buscarNomeUsuario, buscarEmailUsuario, deletarUsuario, atualizarUsuario };
+module.exports = { queryAllUsers,
+	cadastrarUsuario,
+	buscarNomeUsuario,
+	buscarEmailUsuario, 
+	deletarUsuario, 
+	atualizarUsuario };
 
