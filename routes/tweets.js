@@ -5,8 +5,8 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
 	try {
-		const tweetsQuery = await Tweets.buscarTodosTweets();
-		res.json(tweetsQuery);
+		const tweets = await Tweets.buscarTodosTweets();
+		res.json(tweets);
 	}
 	catch (error) {
 		res.json({ error: error.message });
@@ -31,11 +31,19 @@ router.post('/deletar', async (req, res) => {
 	res.json(tweetToDelete);
 })
 
-//terminar funcao de update
-router.post('/atualizar', async (req, res) => {
-	const tweetNewData = req.body;
-	await atualizarTweet(tweetNewData);
-	res.json(tweetNewData);
+router.post('/atualizar/:id/:newData', async (req, res) => {
+	try {
+		const id = req.params.id;
+		const newData = req.params.newData;
+		await atualizarTweet(id, newData);
+		res.json({ 
+			id: id;
+			newData: newData
+		})
+	}
+	catch (error) {
+		res.json({ error: error.message })
+	}
 })
 
 
