@@ -24,10 +24,11 @@ async function novoTweet(tweet) {
 	}
 }
 
+
 async function buscarTweetPalavra(word) {
-    if (!word) {
-        throw new Error("não foi possível buscar, palavra inválida ou não existente")
-    }
+    	if (!word) {
+        	throw new Error("não foi possível buscar, palavra inválida ou não existente")
+    	}
 	try {
 		const db = await connectDB();
 		const found = await db.collection('tweets').find({ word }).limit(10).toArray();
@@ -54,9 +55,9 @@ async function buscarTodosTweets() {
 }
 
 async function deleteTweet(tweetToDelete) {
-    if (!tweetToDelete) {
-        throw new Error("tweet a ser deletado não existe ou inválido");
-    }
+	if (!tweetToDelete) {
+        	throw new Error("tweet a ser deletado não existe ou inválido");
+    	}
 	try {
 		const db = connectDB();
 		await db.collection('tweets').deleteOne({ _id: tweetToDelete._id });
@@ -69,17 +70,19 @@ async function deleteTweet(tweetToDelete) {
 }
 
 async function atualizarTweet(tweetId, tweetContent) {
-    if (!tweetId || !tweetContent) {
-        throw new Error("tweetId ou tweetContent não existente ou inválido");
-    }a
-    
-    try {
-        await tweetsDB.updateOne({ tweetId }), { $set: { tweetContent, updateAt } }
-    }
-    catch (error) {
-	console.log(error);
-    }
-
+    	if (!tweetId || !tweetContent) {
+        	throw new Error("tweetId ou tweetContent não existente ou inválido");
+    	}
+    	try {
+		const db = connectDB();	
+        	await db.collection('tweets').updateOne(
+			{ _id: tweetId }),
+			{ $set: { tweetContent, updateAt: new Date() } }
+		);
+    	}	
+    	catch (error) {
+		res.json({ error: error.message })
+    	}
 }
 
 module.exports = { novoTweet,
