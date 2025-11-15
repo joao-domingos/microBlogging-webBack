@@ -1,25 +1,25 @@
 const { connectDB } = require('./models/database');
 const express = require('express');
 const bodyParser = require('body-parser');
-const userRoutes = require('./routes/users');
+const userAuth = require('./routes/login');
 const tweetRoutes = require('./routes/tweets');
 
 const app = express();
 const port = 3000;
 
+app.use(bodyParser.json());
+app.use('/auth', userAuth)
+app.use('/tweets', tweetRoutes)
+app.use(session({
+  	secret: 'zenitpolar', 
+  	resave: false, 
+  	saveUninitialized: false, 
+}));
+
 async function main() {
 	try {
 		const db = await connectDB;
 		app.locals.db = db;
-
-		app.use(bodyParser.json());
-		app.use('/users', userRoutes)
-		app.use('/tweets', tweetRoutes)
-		app.use(session({
-  			secret: 'zenitpolar', 
-  			resave: false, 
-  			saveUninitialized: false, 
-		}));
 
 		app.listen(port, () => {
 			console.log(`app running on port ${port}`);

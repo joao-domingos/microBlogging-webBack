@@ -1,5 +1,5 @@
 const express = require('express');
-const users = require('../models/users');
+const User = require('../models/User');
 
 const router = express.Router();
 
@@ -55,6 +55,11 @@ router.post('/login/:email/:pwd', async (req, res) => {
 			error: error.message,
 		})
 	}
+});
+
+router.post('/logout', (req, res) => {
+	req.session.destroy();
+	res.json({ message: 'logout successfully' });
 });
 
 module.exports = router;

@@ -6,29 +6,50 @@ const router = express.Router();
 router.get('/', async (req, res) => {
 	try {
 		const tweets = await Tweets.buscarTodosTweets();
-		res.json(tweets);
+		res.json({ 
+			message: "what's happening?",
+			tweets: tweets,
+		});
 	}
 	catch (error) {
 		res.json({ error: error.message });
 	}
 })
 
-router.post('/newTweet', async (req, res) => {
-	const tweetData = req.body;
-	await novoTweet(tweetData);
-	res.json(tweetData);
+router.post('/newTweet/:tweet', async (req, res) => {
+	try {
+		const tweetData = req.params.tweet;
+		await Tweets.novoTweet(tweetData);
+		res.json({ tweet: tweetData });
+	}
+	catch (error) {
+		res.json({ error: error.message });
+	}
 })
 
-router.get('/byWord', async (req, res) => {
-	const wordToFind = req.body;
-	const tweetsByWord = await buscarTweetPalavra(wordToFind);
-	res.json(tweetsByWord);
+router.get('/byWord/:word', async (req, res) => {
+	try {
+		const word = req.params.word;
+		const ttByWord = await Tweets.buscarTweetPalabra(word);
+		res.json({ tweets: ttByWord });
+	}	
+	catch (error) {
+		res.json({ error: error.message })
+	}
 })
 
-router.delete('/deletar', async (req, res) => {
-	const tweetToDelete = req.body;
-	await deleteTweet(tweetToDelete);
-	res.json(tweetToDelete);
+router.delete('/deletar/:id', async (req, res) => {
+	try {
+		const toDelete = req.params.id;
+		await User.deleteTweet(toDelete);
+		res.json({ 
+			message: "deleted successfully",
+			tweet: toDelete,
+		});
+	}
+	catch (error) {
+		res.json({ error: error.message })
+	}
 })
 
 router.put('/atualizar/:id/:newData', async (req, res) => {
@@ -37,9 +58,9 @@ router.put('/atualizar/:id/:newData', async (req, res) => {
 		const newData = req.params.newData;
 		await atualizarTweet(id, newData);
 		res.json({ 
-			id: id;
-			newData: newData
-		})
+			id: _id,
+			newData: newData,
+		});
 	}
 	catch (error) {
 		res.json({ error: error.message })
