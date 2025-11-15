@@ -1,8 +1,16 @@
-const { database } = require('./database');
+const { connectDB } = require('./database');
 const logger = require('./logger');
 
-const db = await connectDB();
-const likesDB = db.collection('likes');
+async function queryAllLiked() {
+	try {
+		const db = connectDB();
+		const queryLikedTweets = await db.collection('likes').find({}).toArray();
+		return queryAllLiked;
+	}
+	catch (error) {
+		res.json({ error: error.message });
+	}
+}
 
 async function curtirTweet(tweetId, userId) {
     if (!tweetId || !userId) {

@@ -64,27 +64,20 @@ async function buscarEmailUsuario(email) {
 	}
 }
 
-async function deletarUsuario(name, email) {
-	if (!name || !email) {
-		throw new Error("os dois campos sao obrigatórios");
+async function deletarUsuario(id) { 
+	if (!id) {
+		throw new Error("id nao existente");
 	}
-	if (!email.includes("@")) {
-		throw new Error("email invalido")
-	}
-	if (typeof name !== "string") {
-		throw new Error("nome invalido");
-	}
-
-	const toExclude = User.buscarEmail(email);
-
-	if (!toExclude) {
-		console.log("nao foi possivel deletar usuario, nao presente no sistema");
-	}
-
 	try {
-		const db = connectDB();
-		await db.users.deleteOne({ name: name, email: email });
-		console.log(`usuario ${email} deletado com sucesso`);
+		const db = await connectDB();
+
+		const toDelete = db.collection('users').find({ id : id });
+		if (!toDelete) {
+			throw new Error("id nao encontrado");
+		}
+
+		await db.users.deleteOne({ id: id });
+		return console.log(`usuario ${id} deletado com sucesso`);
 	}
 	catch (error) {
 		console.log("erro ao deletar usuario");
@@ -92,15 +85,19 @@ async function deletarUsuario(name, email) {
 	}
 }
 
-async function atualizarUsuario(nome, email) {
-    	if (!name || !email) {
-		throw new Error("os dois campos sao obrigatórios");
+async function atualizarUsuario(id, args) {
+	if (!id) {
+		throw new Error("id nao existente");
 	}
-	
 	try {
 		const db = connectDB();
+
+		const toUpdate = await db.collection('users').find({ id: id });
+		if (!toUpdate) {
+			throw new Error("id nao encontrado");
+		}
 		
-		await db.users.updateOne({ nome, email }, { $set: { updateAt: new Date() } });
+		await db.users.updateOne({ id: id }, { $set: { updateAt: new Date() } });
 		console.log("usuario atualizado");
 	}
 	catch (error) {

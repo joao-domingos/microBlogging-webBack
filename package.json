@@ -18,6 +18,7 @@
   "homepage": "https://github.com/joao-domingos/microBlogging-webBack#readme",
   "dependencies": {
     "express": "^5.1.0",
+    "express-session": "^1.18.2",
     "mongodb": "^7.0.0",
     "node": "^25.1.0",
     "nodemon": "^3.1.10"

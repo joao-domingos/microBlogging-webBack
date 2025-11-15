@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
 	}
 })
 
-router.post('/cadastrar', async (req, res) => {
+router.post('/insert', async (req, res) => {
 	try {
 		const user = await User.cadastrarUsuario(req.body);
 		res.json(user);
@@ -45,11 +45,15 @@ router.get('/byEmail/:email', async (req, res) => {
 	}
 })
 
-//meesmo problema da funcao update
-router.post('/deletar', async (req, res) => {
-	const userToDelete = req.body;
-	await deletarUsuario(userToDelete);
-	res.json(userToDelete);
+router.post('/deletar/:id', async (req, res) => {
+	try {
+		const id = req.params.id;
+		const user = await User.deletarUsuario(id);
+		res.json(user);
+	}
+	catch (error) {
+		res.json({ error: error.message });
+	}
 })
 
 //preciso terminar isso, funcao de update no models esta recebendo como parametro nome e email
