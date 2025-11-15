@@ -45,7 +45,7 @@ router.get('/byEmail/:email', async (req, res) => {
 	}
 })
 
-router.post('/deletar/:id', async (req, res) => {
+router.delete('/deletar/:id', async (req, res) => {
 	try {
 		const id = req.params.id;
 		const user = await User.deletarUsuario(id);

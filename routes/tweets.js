@@ -25,13 +25,13 @@ router.get('/byWord', async (req, res) => {
 	res.json(tweetsByWord);
 })
 
-router.post('/deletar', async (req, res) => {
+router.delete('/deletar', async (req, res) => {
 	const tweetToDelete = req.body;
 	await deleteTweet(tweetToDelete);
 	res.json(tweetToDelete);
 })
 
-router.post('/atualizar/:id/:newData', async (req, res) => {
+router.put('/atualizar/:id/:newData', async (req, res) => {
 	try {
 		const id = req.params.id;
 		const newData = req.params.newData;
