@@ -27,7 +27,7 @@ async function novoTweet(tweet) {
 
 async function buscarTweetPalavra(word) {
     	if (!word) {
-        	throw new Error("não foi possível buscar, palavra inválida ou não existente")
+        	throw new Error("não foi possível buscar, palavra inválida ou não existente");
     	}
 	try {
 		const db = await connectDB();
@@ -76,8 +76,8 @@ async function atualizarTweet(tweetId, tweetContent) {
     	try {
 		const db = connectDB();	
         	await db.collection('tweets').updateOne(
-			{ _id: tweetId }),
-			{ $set: { tweetContent, updateAt: new Date() } }
+			{ _id: tweetId },
+			{ $set: { tweetContent, updateAt: new Date() }},
 		);
     	}	
     	catch (error) {

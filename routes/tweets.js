@@ -30,7 +30,7 @@ router.post('/newTweet/:tweet', async (req, res) => {
 router.get('/byWord/:word', async (req, res) => {
 	try {
 		const word = req.params.word;
-		const ttByWord = await Tweets.buscarTweetPalabra(word);
+		const ttByWord = await Tweets.buscarTweetPalavra(word);
 		res.json({ tweets: ttByWord });
 	}	
 	catch (error) {
