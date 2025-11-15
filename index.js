@@ -16,12 +16,9 @@ async function main() {
 		app.use('/users', userRoutes)
 		app.use('/tweets', tweetRoutes)
 		app.use(session({
-  			// Esta 'secret' é usada para "assinar" o cookie da sessão.
-  			// Mude para uma string aleatória e segura.
   			secret: 'zenitpolar', 
-  
-  			resave: false, // Não salva a sessão se não houver modificação
-  			saveUninitialized: false, // Não cria sessão para quem não está logado
+  			resave: false, 
+  			saveUninitialized: false, 
 		}));
 
 		app.listen(port, () => {

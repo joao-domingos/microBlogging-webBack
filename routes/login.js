@@ -3,7 +3,7 @@ const users = require('../models/users');
 
 const router = express.Router();
 
-router.pos('/register/:email/:pwd', async (req, res) => {
+router.post('/register/:email/:pwd', async (req, res) => {
 	try {
 		const userCred = {
 			email: req.params.email,
